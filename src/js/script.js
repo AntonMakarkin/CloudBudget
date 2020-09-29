@@ -4,6 +4,7 @@ import autoSlider from './modules/autocarouselslider';
 import toggleMobileMenu from './modules/togglemenu';
 import floatHeader from './modules/floatheader';
 import scrolling from './modules/scrolling';
+import usewebp from './modules/testwebp';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -12,6 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
     autoSlider();
     toggleMobileMenu();
     floatHeader();
+    usewebp();
 });
 
 

@@ -148,7 +148,7 @@ gulp.task("build-js", () => {
 });
 
 gulp.task("build-prod-js", () => {
-    return gulp.src("./src/js/main.js")
+    return gulp.src("./src/js/script.js")
                .pipe(webpack({
                    mode: 'production',
                    output: {
@@ -162,9 +162,12 @@ gulp.task("build-prod-js", () => {
                                use: {
                                    loader: 'babel-loader',
                                    options: {
-                                       presets: [['@babel/present-env', {
-                                           corejs: 3,
-                                           useBuiltIns: "usage"
+                                       presets: [["@babel/preset-env", {
+                                           targets: {
+                                               "node": "current"
+                                           },
+                                           "corejs": 3,
+                                           "useBuiltIns": "usage"
                                        }]]
                                    }
                                }   
@@ -172,7 +175,8 @@ gulp.task("build-prod-js", () => {
                        ]
                    }
                }))
-               .pipe(gulp.dest(path.build.js));
+               .pipe(gulp.dest(path.build.js))
+               .on("end", browsersync.reload);
 });
 
 function cb() {
@@ -182,7 +186,7 @@ function cb() {
 function watchFiles() {
     gulp.watch([path.watch.html], html);
     gulp.watch([path.watch.css], css);
-    gulp.watch([path.watch.js], gulp.parallel("build-js"));
+    gulp.watch([path.watch.js], gulp.parallel("build-prod-js"));
     gulp.watch([path.watch.img], images);
     gulp.watch([path.watch.svg], exportSVG);
 }
@@ -191,7 +195,7 @@ function clean() {
     return del(path.clean);
 }
 
-let build = gulp.series(clean, gulp.parallel(css, html, images, exportSVG, "build-js"));
+let build = gulp.series(clean, gulp.parallel(css, html, images, exportSVG, "build-prod-js"));
 let watch = gulp.parallel(build, watchFiles, browserSync);
 
 exports.exportSVG = exportSVG;
